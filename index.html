@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FBI System</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background: black;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      h1 {
+        font-size: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>&#128374; FBI System &#128374;</h1>
+    <div class="card bg-secondary text-center">
+      <div class="card-body">
+        <form id="login-form" class="bg-dark text-white p-3">
+          <h2>Input credentials</h2>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="text" name="email" id="email" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              class="form-control"
+            />
+          </div>
+          <button class="btn btn-primary" type="submit">Enter &#128373;</button>
+        </form>
+        <div id="errorMessage" class="text-danger mt-2" style="display: none">
+          Authentication failed, please try again
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const data = Object.fromEntries(formData.entries());
+
+          const response = await fetch("/SignIn", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.status === 200) {
+            const html = await response.text();
+            document.open();
+            document.write(html);
+            document.close();
+          } else {
+            document.getElementById("errorMessage").style.display = "block";
+            setTimeout(() => {
+              document.getElementById("errorMessage").style.display = "none";
+            }, 1500);
+          }
+        });
+    </script>
+  </body>
+</html>
